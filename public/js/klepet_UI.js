@@ -100,7 +100,20 @@ $(document).ready(function() {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
   });
-
+  
+  socket.on('dregljaj', function(x) {
+     if (x.dregljaj) {
+       //alert("dregljaj");
+       
+       $("#vsebina").trigger('startRumble');
+       setTimeout(function () {
+         $("#vsebina").trigger('stopRumble');
+       }, 1500);
+     } 
+  });
+  
+  $("#vsebina").jrumble();
+  
   setInterval(function() {
     socket.emit('kanali');
     socket.emit('uporabniki', {kanal: trenutniKanal});
