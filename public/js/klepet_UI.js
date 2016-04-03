@@ -4,7 +4,8 @@ function divElementEnostavniTekst(sporocilo) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
-    return $('<div style="font-weight: bold;"></div>').text(sporocilo);
+    if (sporocilo === izbraniUporabnik) return $('<div style="font-weight: bold; background-color:gray;"></div>').text(sporocilo);
+    else return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
 
@@ -34,6 +35,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
 
 var socket = io.connect();
 var trenutniVzdevek = "", trenutniKanal = "";
+var izbraniUporabnik = "";
 
 var vulgarneBesede = [];
 $.get('/swearWords.txt', function(podatki) {
@@ -97,8 +99,19 @@ $(document).ready(function() {
   socket.on('uporabniki', function(uporabniki) {
     $('#seznam-uporabnikov').empty();
     for (var i=0; i < uporabniki.length; i++) {
+      //$('#seznam-uporabnikov').append($('<div style="font-weight: bold;cursor:pointer;" onClick="hitroSporocilo(\''+uporabniki[i]+'\')"></div>').text(uporabniki[i]));
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
+    
+    
+    
+    $('#seznam-uporabnikov div').click(function() {
+      $('#seznam-uporabnikov div').css("background-color", "white");
+      izbraniUporabnik = $(this).text();
+      $(this).css("background-color", "gray");
+      $("#poslji-sporocilo").val('/zasebno "' + izbraniUporabnik + '" ');
+      $('#poslji-sporocilo').focus();
+    });
   });
 
   setInterval(function() {
@@ -113,6 +126,9 @@ $(document).ready(function() {
     return false;
   });
   
+  $('#seznam-uporabnikov').mouseover(function() {
+    $(this).css("cursor", "pointer");
+  });
   
 });
 
@@ -131,3 +147,8 @@ function dodajSmeske(vhodnoBesedilo) {
   }
   return vhodnoBesedilo;
 }
+
+/*function hitroSporocilo(uporabnik) {
+  $('#poslji-sporocilo').val('/zasebno "' + uporabnik + '" ');
+  $('#poslji-sporocilo').focus();
+}*/
