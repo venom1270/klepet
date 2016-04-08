@@ -1,8 +1,9 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  var jeSlika = sporocilo.indexOf('alt="Slika"') > -1;
+  var jeSlika = sporocilo.indexOf("alt='Slika'") > -1;
   if (jeSmesko || jeSlika) {
-    //sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />')
+                          .replace('jpg\' /&gt;', 'jpg\' />').replace('gif\' /&gt;', 'gif\' />') //za jpg,gif slike
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
@@ -135,8 +136,8 @@ function dodajSmeske(vhodnoBesedilo) {
 }
 
 function dodajSlike(vhod) {
-  vhod = vhod.replace(new RegExp('\\b(http://|https://)[a-z0-9\_./-]*(.jpg|.gif|.png)\\b', 'g'), function(x) {
-    return '<img style="width:200px; margin-left:20px;" src="'+x+'" alt="Slika" />';
+  vhod = vhod.replace(new RegExp('\\b(http://|https://).*(.jpg|.gif|.png)\\b', 'g'), function(x) {
+    return "<img style='width:200px; margin-left:20px;' alt='Slika' src='"+x+"' />";
   });
   return vhod;
 }
