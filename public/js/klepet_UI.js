@@ -4,8 +4,7 @@ function divElementEnostavniTekst(sporocilo) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
-    if (sporocilo === izbraniUporabnik) return $('<div style="font-weight: bold; background-color:gray;"></div>').text(sporocilo);
-    else return $('<div style="font-weight: bold;"></div>').text(sporocilo);
+    return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
 
@@ -31,6 +30,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
   }
 
   $('#poslji-sporocilo').val('');
+  izbraniUporabnik = ""; //da nebo na desni strani vec obarvan (hitra zasebna sporocila)
 }
 
 var socket = io.connect();
@@ -100,7 +100,12 @@ $(document).ready(function() {
     $('#seznam-uporabnikov').empty();
     for (var i=0; i < uporabniki.length; i++) {
       //$('#seznam-uporabnikov').append($('<div style="font-weight: bold;cursor:pointer;" onClick="hitroSporocilo(\''+uporabniki[i]+'\')"></div>').text(uporabniki[i]));
-      $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
+      if (uporabniki[i] === izbraniUporabnik) {
+        $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]).css("background-color", "#ddd"));
+      } else {
+        $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
+      }
+      
     }
     
     
@@ -108,7 +113,7 @@ $(document).ready(function() {
     $('#seznam-uporabnikov div').click(function() {
       $('#seznam-uporabnikov div').css("background-color", "white");
       izbraniUporabnik = $(this).text();
-      $(this).css("background-color", "gray");
+      $(this).css("background-color", "#ddd");
       $("#poslji-sporocilo").val('/zasebno "' + izbraniUporabnik + '" ');
       $('#poslji-sporocilo').focus();
     });
