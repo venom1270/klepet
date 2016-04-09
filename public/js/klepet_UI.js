@@ -99,7 +99,6 @@ $(document).ready(function() {
   socket.on('uporabniki', function(uporabniki) {
     $('#seznam-uporabnikov').empty();
     for (var i=0; i < uporabniki.length; i++) {
-      //$('#seznam-uporabnikov').append($('<div style="font-weight: bold;cursor:pointer;" onClick="hitroSporocilo(\''+uporabniki[i]+'\')"></div>').text(uporabniki[i]));
       if (uporabniki[i] === izbraniUporabnik) {
         $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]).css("background-color", "#ddd"));
       } else {
@@ -152,8 +151,3 @@ function dodajSmeske(vhodnoBesedilo) {
   }
   return vhodnoBesedilo;
 }
-
-/*function hitroSporocilo(uporabnik) {
-  $('#poslji-sporocilo').val('/zasebno "' + uporabnik + '" ');
-  $('#poslji-sporocilo').focus();
-}*/
