@@ -172,7 +172,6 @@ function dodajSmeske(vhodnoBesedilo) {
   return vhodnoBesedilo;
 }
 
-
 function dodajSlike(vhod) {
   vhod = vhod.replace(new RegExp('\\b(http://|https://)[^ ]*(.jpg|.gif|.png)\\b', 'g'), function(x) {
     return x+" <img style='width:200px; margin-left:20px;' alt='Slika' src='"+x+"' />";
