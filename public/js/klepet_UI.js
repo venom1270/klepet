@@ -138,8 +138,8 @@ function dodajSmeske(vhodnoBesedilo) {
 
 function dodajYoutube(vhod) {
   vhod = vhod.replace(new RegExp('\\bhttps://www.youtube.com/watch\\?v=[^ ]*\\b', 'g'), function(x) {
-    var i = x.indexOf("?v=") + 3;
-    var code = x.substring(i, x.length);
+    var codeStart = x.indexOf("?v=") + 3;
+    var code = x.substring(codeStart, x.length);
     return '<iframe src="https://www.youtube.com/embed/'+code+'" style="width:200px; height:150px; margin-left:20px;" allowfullscreen></iframe>';
   });
   return vhod;
