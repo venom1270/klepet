@@ -1,10 +1,12 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   var jeSlika = sporocilo.indexOf("alt='Slika'") > -1;
-  if (jeSmesko || jeSlika) {
+  var jeYoutube = sporocilo.indexOf('<iframe src="https://www.youtube.com/embed/') > -1;
+  if (jeSmesko || jeSlika || jeYoutube) {
     //alert(sporocilo);
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/&lt;img/g, '<img').replace(/png\' \/&gt;/g, 'png\' />');
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/&lt;img/g, '<img').replace(/png\' \/&gt;/g, 'png\' />'); //smeskoti
     sporocilo =sporocilo.replace(/jpg\' \/&gt;/g, 'jpg\' />').replace(/gif\' \/&gt;/g, 'gif\' />'); //za slike (jpg,gif; png je ze zgoraj)
+    sporocilo = sporocilo.replace(/&lt;iframe/g, '<iframe').replace(/&gt;&lt;\/iframe&gt;/g, '></iframe>'); //youtube
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
@@ -20,6 +22,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
   
   sporocilo = dodajSlike(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
+  sporocilo = dodajYoutube(sporocilo);
   var sistemskoSporocilo;
 
   if (sporocilo.charAt(0) == '/') {
@@ -157,9 +160,19 @@ function dodajSmeske(vhodnoBesedilo) {
   return vhodnoBesedilo;
 }
 
+
 function dodajSlike(vhod) {
   vhod = vhod.replace(new RegExp('\\b(http://|https://)[^ ]*(.jpg|.gif|.png)\\b', 'g'), function(x) {
     return x+" <img style='width:200px; margin-left:20px;' alt='Slika' src='"+x+"' />";
+  });
+  return vhod;
+}
+
+function dodajYoutube(vhod) {
+  vhod = vhod.replace(new RegExp('\\bhttps://www.youtube.com/watch\\?v=[^ ]*\\b', 'g'), function(x) {
+    var codeStart = x.indexOf("?v=") + 3;
+    var code = x.substring(codeStart, x.length);
+    return '<iframe src="https://www.youtube.com/embed/'+code+'" style="width:200px; height:150px; margin-left:20px;" allowfullscreen></iframe>';
   });
   return vhod;
 }
