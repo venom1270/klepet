@@ -104,7 +104,6 @@ $(document).ready(function() {
   socket.on('dregljaj', function(x) {
      if (x.dregljaj) {
        //alert("dregljaj");
-       
        $("#vsebina").trigger('startRumble');
        setTimeout(function () {
          $("#vsebina").trigger('stopRumble');
