@@ -125,7 +125,19 @@ $(document).ready(function() {
       $('#poslji-sporocilo').focus();
     });
   });
-
+  
+  socket.on('dregljaj', function(x) {
+     if (x.dregljaj) {
+       //alert("dregljaj");
+       $("#vsebina").trigger('startRumble');
+       setTimeout(function () {
+         $("#vsebina").trigger('stopRumble');
+       }, 1500);
+     } 
+  });
+  
+  $("#vsebina").jrumble();
+  
   setInterval(function() {
     socket.emit('kanali');
     socket.emit('uporabniki', {kanal: trenutniKanal});
